@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- This is line is not required however, it is a good idea to 
+      to help scale to the monitor size-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA Simulator</title>
+    <!--You are leaving HTML and about to start CSS, you know this 
+      due to the style tags-->
+    <style>
+        /* This is styling CSS comment, notioce the diff start and end syntax */
+        /*Style the body */
+        /* When you put the name of a tag then it will style all tags with that name.
+        Please note, this does not mean using the name property. */
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: black;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        /* This # will style an element with a specific ID */
+        /* You can not have two elements with the same ID */
+        #game-container{
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: grey;
+            border: 1px solid yellow;
+            border-radius: 8px;
+        }
+        /* The . symbol is used to style one or more elements with a specific class */
+        .ship{
+            border: 1px solid white;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        /* When you put the name of a tag then it will style all the tags with that name.
+        Please note, this does not mean using the name property */
+        button{
+            padding: 5px 10px;
+            margin-top: 10px;
+        }
+
+        /* Style the back color of the class top info to dark green */
+        .top-information{
+            background-color: rgb(207, 221, 17);
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<!--Using HTML our body section starts here-->
+<body>
+    <div id="game-container">
+        <h1>NASA Manager</h1>
+        <div id="directions" class="top-information">
+            <p>Welcome to NASA Manager! Use this console to keep track of all ships you service and to bill the captain.</div>
+            <p>Each time you click on a ship that has been serviced, credits will transfer from the captain to the Space account</p>
+        </div>
+    </div>
+    <div id="credits" class="top-information">
+        <h2>Ship Credits: <span id="credits-amount">0</span></h2>
+    </div>
+    <div id="ships-container">
+        <!-- We are going to use JavaScript to add ships here, this can be done by using the id ships-container -->
+    </div>
+    <!-- We are leaving HTML and going into JavaScript-->
+    <script>
+        // Create our class for the spaceship 
+        class SpaceShip{
+            constructor(name, serviceCost){
+                this.name = name;
+                this.serviceCost = serviceCost;
+            }
+            // This is a method, it is a function that is part of a class
+            // This method will service the ship and add credits
+            service(){
+                game.credits = game.credits + this.serviceCost;
+                game.updateCreditsDisplay();
+            }
+        
+        }
+        //Create our game class
+        class Game{
+            constructor(){
+                this.credits = 0;
+                this.ships=[];
+            }
+            //Create a method to update the credits on the page
+            updateCreditsDisplay(){
+                document.getElementById("credits-amount").innerText = this.credits;
+            }
+            //Create a method to add a ship to the page
+            addShip(ship){
+                this.ships.push(ship);
+                this.displayShip(ship);
+            }
+            //Create a method to display a ship on the page
+            displayShip(ship){
+                const container = document.getElementById("ships-container");
+                const shipDiv = document.createElement("div");
+                shipDiv.classList.add("ship");
+                shipDiv.innerHTML = "<h2>" + ship.name + "</h2><p>Ship Cost: " + ship.serviceCost + "credits";
+                shipDiv.onclick = function(){
+                    ship.service();
+                };
+                container.appendChild(shipDiv);
+
+            }
+        }
+
+        //Create a new game object instance from our class.
+        const game = new Game();
+
+        //Create a new coin object instance from our class.
+        const ships = [
+            new SpaceShip("Sputnik 1", 200),
+            new SpaceShip("GOES-18", 50),
+            new SpaceShip("GOES-16", 70),
+            new SpaceShip("Mars Odyssey", 120)
+        ];
+
+        // Add each ship to the game
+        ships.forEach(ship => game.addShip(ship));
+    </script>
+    
+</body>
+</html>
